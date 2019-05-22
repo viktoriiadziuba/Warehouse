@@ -1,7 +1,6 @@
 CREATE TABLE "supplier" (
 	"supplier_id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
-	"country" varchar(255) NOT NULL,
 	CONSTRAINT supplier_pk PRIMARY KEY ("supplier_id")
 ) WITH (
   OIDS=FALSE
@@ -24,9 +23,8 @@ CREATE TABLE "product" (
 
 CREATE TABLE "order" (
 	"order_id" serial NOT NULL,
-	"name" varchar(255) NOT NULL,
 	"date_of_order" DATE NOT NULL,
-	"receiving_date" DATE NOT NULL,
+	"closing_date" DATE NOT NULL,
 	CONSTRAINT order_pk PRIMARY KEY ("order_id")
 ) WITH (
   OIDS=FALSE
@@ -36,6 +34,7 @@ CREATE TABLE "order" (
 
 CREATE TABLE "storage" (
 	"storage_id" serial NOT NULL,
+	"capacity" integer NOT NULL,
 	CONSTRAINT storage_pk PRIMARY KEY ("storage_id")
 ) WITH (
   OIDS=FALSE
@@ -49,7 +48,7 @@ CREATE TABLE "client" (
 	"surname" varchar(255) NOT NULL,
 	"phone_number" varchar(255) NOT NULL UNIQUE,
 	"email" varchar(255) NOT NULL UNIQUE,
-	"client_date_of_birth" DATE NOT NULL,
+	"date_of_birth" DATE NOT NULL,
 	CONSTRAINT client_pk PRIMARY KEY ("client_id")
 ) WITH (
   OIDS=FALSE
@@ -59,12 +58,22 @@ CREATE TABLE "client" (
 
 CREATE TABLE "employee" (
 	"employee_id" serial NOT NULL,
-	"employee_name" varchar(255) NOT NULL,
-	"employee_surname" varchar(255) NOT NULL,
-	"employee_phone_number" varchar(255) NOT NULL UNIQUE,
-	"employee_email" varchar(255) UNIQUE,
-	"employee_date_of_birth" DATE NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"surname" varchar(255) NOT NULL,
+	"phone_number" varchar(255) NOT NULL UNIQUE,
+	"email" varchar(255) UNIQUE,
+	"date_of_birth" DATE NOT NULL,
 	CONSTRAINT employee_pk PRIMARY KEY ("employee_id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "country" (
+	"country_id" serial NOT NULL,
+	"name" varchar(255) NOT NULL UNIQUE,
+	CONSTRAINT country_pk PRIMARY KEY ("country_id")
 ) WITH (
   OIDS=FALSE
 );
@@ -81,4 +90,6 @@ ALTER TABLE "order" ADD CONSTRAINT "order_fk0" FOREIGN KEY ("order_id") REFERENC
 ALTER TABLE "client" ADD CONSTRAINT "client_fk0" FOREIGN KEY ("client_id") REFERENCES "order"("order_id");
 
 ALTER TABLE "employee" ADD CONSTRAINT "employee_fk0" FOREIGN KEY ("employee_id") REFERENCES "client"("client_id");
+
+ALTER TABLE "country" ADD CONSTRAINT "country_fk0" FOREIGN KEY ("country_id") REFERENCES "supplier"("supplier_id");
 
